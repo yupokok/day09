@@ -33,13 +33,15 @@ public class World {
         try (FileReader fr = new FileReader(file)){
         System.out.println("Start of try block");
         BufferedReader br = new BufferedReader(fr);
-        String eachLine = br.readLine();
+        String eachLine;
         Room room = null;
 
         while(null!= (eachLine = br.readLine())){
             eachLine.trim();
-            if(eachLine.length()>0){
-               String[] terms = eachLine.split(":");
+            if(eachLine.length()<= 0 || eachLine.startsWith("//")){
+                continue;
+            }
+            String[] terms = eachLine.split(":");
 
             switch (terms[0]) {
                 case "room":
@@ -56,15 +58,18 @@ public class World {
                     break;
                 
                 case "direction":
-                    room.setDirection(terms[1], terms[2]);
+                    String[] directions = terms[1].split(" "); 
+                    room.setDirection(directions[0], directions[1]);
+                    break;
 
                 case "start":
                     currRoom = rooms.get(terms[1]);
+                    System.out.println(currRoom);
+                    break;
             }
         }
     }
     
-    }
     catch (Exception error) {
         System.out.printf("There has been an error %s", error);
     }
